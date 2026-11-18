@@ -1,10 +1,15 @@
-﻿namespace DA.AllergyJournal.Model
+﻿using SQLite;
+
+namespace DA.AllergyJournal.Model
 {
 	/// <ChangeLog>
 	/// <Create Datum="18.11.2026" Entwickler="DA" />
+	/// <Change Datum="18.11.2026" Entwickler="DA">add Id (ToDo-Nr. #2)</Change>
 	/// </ChangeLog>
 	public class DailyJournalEntry
 	{
+		[AutoIncrement, PrimaryKey]
+		public int Id { get; set; }
 		public DateOnly Date{ get; set; }
 		public LevelOfPain Nose { get; set; }
 		public LevelOfPain Eyes { get; set; }

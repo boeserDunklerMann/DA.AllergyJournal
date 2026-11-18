@@ -7,7 +7,7 @@ namespace DA.AllergyJournal.MAUI.Proto.MVVM.Framework
 	/// <ChangeLog>
 	/// <Create Datum="18.11.2026" Entwickler="DA" />
 	/// </ChangeLog>
-	internal class BaseViewModel : ObservableObject, IDisposable
+	public class BaseViewModel : ObservableObject, IDisposable
 	{
 		public void Dispose()
 		{

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DA.AllergyJournal.MAUI.Proto.MVVM.Framework;
+using DA.AllergyJournal.Model;
 using System.Windows.Input;
 
 namespace DA.AllergyJournal.MAUI.Proto.MVVM
 {
 	/// <ChangeLog>
 	/// <Create Datum="18.11.2026" Entwickler="DA" />
+	/// <Change Datum="18.11.2026" Entwickler="DA">Datatest-stuff added (ToDo-Nr. #2)</Change>
+	/// <Change Datum="18.11.2026" Entwickler="DA">DbContext nur noch per Konstruktor-Injection, public für DI</Change>
 	/// </ChangeLog>
-	internal class MainPageVM : Framework.BaseViewModel
+	public class MainPageVM(DbContext ctx) : Framework.BaseViewModel
 	{
 		#region UI-bound props
 		public string Usersname { get; set; } = "";
@@ -28,7 +29,8 @@ namespace DA.AllergyJournal.MAUI.Proto.MVVM
 		#endregion
 
 		#region UI-bound commands
-		public ICommand ButtonClickCommand => new Framework.DelegateCommand(OnButtonClick);
+		public ICommand ButtonClickCommand => new DelegateCommand(OnButtonClick);
+		public ICommand ButtonTestDataCommand => new DelegateCommand(OnButtonTestData);
 		#endregion
 
 		private async void OnButtonClick()
@@ -38,6 +40,16 @@ namespace DA.AllergyJournal.MAUI.Proto.MVVM
 			else
 				Greeting = $"Hi {Usersname}!";
 			await Task.CompletedTask;
+		}
+
+		private async void OnButtonTestData()
+		{
+			MonthlyJournalEntry month = new MonthlyJournalEntry() { Month = 11, Year = 2026 };
+			DailyJournalEntry daily1 = new DailyJournalEntry() { Date = new DateOnly(2026, 11, 17), Eyes = LevelOfPain.Light, Nose = LevelOfPain.Moderate, Lung = LevelOfPain.Nothing, Skin = LevelOfPain.Nothing };
+			DailyJournalEntry daily2 = new DailyJournalEntry() { Date = new DateOnly(2026, 11, 18), Eyes = LevelOfPain.Nothing, Nose = LevelOfPain.Moderate, Lung = LevelOfPain.Nothing, Skin = LevelOfPain.Nothing };
+			await ctx.SaveAsync(month);
+			await ctx.SaveAsync(daily1);
+			await ctx.SaveAsync(daily2);
 		}
 	}
 }

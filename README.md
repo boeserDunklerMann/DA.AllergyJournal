@@ -17,5 +17,7 @@ Goal is it to create an Android-App for documenting your allergy and for printin
 Following components/assemblies will be created:
 ### DA.AllergyJournal.Model
 ### DA.AllergyJournal.MAUI.Proto
-Prototype for creating and deploying a MAUI app onto Android device
+Prototype for creating and deploying a MAUI app onto Android device, including a MVVM-pattern
 
+## Remarks
+1. all times in UTC

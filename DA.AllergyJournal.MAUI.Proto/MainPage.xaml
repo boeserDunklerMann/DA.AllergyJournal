@@ -2,23 +2,55 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 xmlns:vm="clr-namespace:DA.AllergyJournal.MAUI.Proto.MVVM"
+			 xmlns:model="clr-namespace:DA.AllergyJournal.Model;assembly=DA.AllergyJournal.Model"
 			 x:Class="DA.AllergyJournal.MAUI.Proto.MainPage"
 			 x:DataType="vm:MainPageVM"
 			 BackgroundColor="Blue">
-	<VerticalStackLayout Padding="30" Spacing="20">
-		<Label Text="Hello Android!"
-			   FontSize="28"
-			   HorizontalOptions="Center"
-			   />
-		<Entry x:Name="entryName"
-			   Placeholder="Dein Name"
-			   Text="{Binding Usersname}"/>
-		<Button Text="Hello!"
-				x:Name="btnHello"
-				Command="{Binding ButtonClickCommand}"/>
-		<Label x:Name="labelAusgabe"
-			   Text="{Binding Greeting}"/>
-		<Button Text="Teste Datenzugriff"
-				Command="{Binding ButtonTestDataCommand}"/>
-	</VerticalStackLayout>
+	<!-- Grid statt VerticalStackLayout, damit die CollectionView eine begrenzte Höhe bekommt und scrollen kann -->
+	<Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+
+		<VerticalStackLayout Spacing="20">
+			<Label Text="Hello Android!"
+				   FontSize="28"
+				   HorizontalOptions="Center"
+				   />
+			<Entry x:Name="entryName"
+				   Placeholder="Dein Name"
+				   Text="{Binding Usersname}"/>
+			<Button Text="Hello!"
+					x:Name="btnHello"
+					Command="{Binding ButtonClickCommand}"/>
+			<Label x:Name="labelAusgabe"
+				   Text="{Binding Greeting}"/>
+			<Button Text="Teste Datenzugriff"
+					Command="{Binding ButtonTestDataCommand}"/>
+		</VerticalStackLayout>
+
+		<!-- Kopfzeile: Spalten müssen zu den Datenzeilen passen -->
+		<Grid Grid.Row="1" ColumnDefinitions="32,84,*,*,*,*" Padding="8" BackgroundColor="LightGray">
+			<Label Text="Id" FontAttributes="Bold" />
+			<Label Grid.Column="1" Text="Datum" FontAttributes="Bold" />
+			<Label Grid.Column="2" Text="Nase" FontAttributes="Bold" />
+			<Label Grid.Column="3" Text="Augen" FontAttributes="Bold" />
+			<Label Grid.Column="4" Text="Lunge" FontAttributes="Bold" />
+			<Label Grid.Column="5" Text="Haut" FontAttributes="Bold" />
+		</Grid>
+
+		<!-- Datenzeilen -->
+		<CollectionView Grid.Row="2" ItemsSource="{Binding Dailies}" SelectionMode="Single">
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="model:DailyJournalEntry">
+					<Grid ColumnDefinitions="32,84,*,*,*,*" Padding="8">
+						<Label Text="{Binding Id}" />
+						<Label Grid.Column="1" Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}" />
+						<Label Grid.Column="2" Text="{Binding Nose, Converter={StaticResource LevelOfPainToText}}" />
+						<Label Grid.Column="3" Text="{Binding Eyes, Converter={StaticResource LevelOfPainToText}}" />
+						<Label Grid.Column="4" Text="{Binding Lung, Converter={StaticResource LevelOfPainToText}}" />
+						<Label Grid.Column="5" Text="{Binding Skin, Converter={StaticResource LevelOfPainToText}}" />
+					</Grid>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+	</Grid>
 </ContentPage>

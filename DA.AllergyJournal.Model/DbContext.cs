@@ -7,7 +7,8 @@ namespace DA.AllergyJournal.Model
 {
 	/// <ChangeLog>
 	/// <Create Datum="18.11.2026" Entwickler="DA" />
-	/// </ChangeLog>
+	/// <Change Datum="18.11.2026" Entwickler="DA">complete FUCK (ToDo-Nr. #4)</Change>
+		/// </ChangeLog>
 	public class DbContext(string databasePath)
 	{
 		private SQLiteAsyncConnection? _db;
@@ -50,6 +51,12 @@ namespace DA.AllergyJournal.Model
 		{
 			await Init();
 			return entry.Id != 0 ? await _db!.UpdateAsync(entry) : await _db!.InsertAsync(entry);
+		}
+
+		public async Task<int> DeleteAsync(JournalEntryBase entry)
+		{
+			await Init();
+			return await _db!.DeleteAsync(entry);
 		}
 	}
 }

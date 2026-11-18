@@ -1,5 +1,6 @@
 ﻿using DA.AllergyJournal.MAUI.Proto.MVVM.Framework;
 using DA.AllergyJournal.Model;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace DA.AllergyJournal.MAUI.Proto.MVVM
@@ -8,6 +9,7 @@ namespace DA.AllergyJournal.MAUI.Proto.MVVM
 	/// <Create Datum="18.11.2026" Entwickler="DA" />
 	/// <Change Datum="18.11.2026" Entwickler="DA">Datatest-stuff added (ToDo-Nr. #2)</Change>
 	/// <Change Datum="18.11.2026" Entwickler="DA">DbContext nur noch per Konstruktor-Injection, public für DI</Change>
+	/// <Change Datum="18.11.2026" Entwickler="DA">LoadDataAsync wird beim Anzeigen der Seite aufgerufen, Dailies als einzelne ObservableCollection</Change>
 	/// </ChangeLog>
 	public class MainPageVM(DbContext ctx) : Framework.BaseViewModel
 	{
@@ -26,6 +28,7 @@ namespace DA.AllergyJournal.MAUI.Proto.MVVM
 				}
 			}
 		}
+		public ObservableCollection<DailyJournalEntry> Dailies { get; } = [];
 		#endregion
 
 		#region UI-bound commands
@@ -50,6 +53,16 @@ namespace DA.AllergyJournal.MAUI.Proto.MVVM
 			await ctx.SaveAsync(month);
 			await ctx.SaveAsync(daily1);
 			await ctx.SaveAsync(daily2);
+			await LoadDataAsync();
+		}
+
+		/// <summary>Wird von MainPage.OnAppearing aufgerufen.</summary>
+		public async Task LoadDataAsync()
+		{
+			var dailies = await ctx.GetDailyJournalEntriesAsync();
+			Dailies.Clear();
+			foreach (var daily in dailies)
+				Dailies.Add(daily);
 		}
 	}
 }

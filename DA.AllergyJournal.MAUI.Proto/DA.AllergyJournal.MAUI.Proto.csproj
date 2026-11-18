@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0-android</TargetFrameworks>
@@ -25,7 +25,6 @@
 		     For individual files, you can override by setting Inflator metadata:
 		       <MauiXaml Update="MyPage.xaml" Inflator="Default" /> (reverts to defaults: Runtime for Debug, XamlC for Release)
 		       <MauiXaml Update="MyPage.xaml" Inflator="Runtime" /> (force runtime inflation) -->
-		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 
 		<!-- Display name -->
 		<ApplicationTitle>DA.AllergyJournal.MAUI.Proto</ApplicationTitle>
@@ -63,6 +62,15 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AndroidResource Remove="MVVM\NewFolder\**" />
+	  <Compile Remove="MVVM\NewFolder\**" />
+	  <EmbeddedResource Remove="MVVM\NewFolder\**" />
+	  <MauiCss Remove="MVVM\NewFolder\**" />
+	  <MauiXaml Remove="MVVM\NewFolder\**" />
+	  <None Remove="MVVM\NewFolder\**" />
 	</ItemGroup>
 
 	<ItemGroup>

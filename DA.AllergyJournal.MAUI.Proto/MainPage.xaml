@@ -1,16 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 x:Class="DA.AllergyJournal.MAUI.Proto.MainPage">
+			 xmlns:vm="clr-namespace:DA.AllergyJournal.MAUI.Proto.MVVM"
+			 x:Class="DA.AllergyJournal.MAUI.Proto.MainPage"
+			 BackgroundColor="Blue">
+	<ContentPage.BindingContext>
+		<vm:MainPageVM/>
+	</ContentPage.BindingContext>
 	<VerticalStackLayout Padding="30" Spacing="20">
 		<Label Text="Hello Android!"
 			   FontSize="28"
-			   HorizontalOptions="Center"/>
+			   HorizontalOptions="Center"
+			   />
 		<Entry x:Name="entryName"
-			   Placeholder="Dein Name"/>
+			   Placeholder="Dein Name"
+			   Text="{Binding Usersname}"/>
 		<Button Text="Hello!"
 				x:Name="btnHello"
-				Clicked="OnBtnHelloClicked"/>
-		<Label x:Name="labelAusgabe"/>
+				Command="{Binding ButtonClickCommand}"/>
+		<Label x:Name="labelAusgabe"
+			   Text="{Binding Greeting}"/>
 	</VerticalStackLayout>
 </ContentPage>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DA.AllergyJournal.MAUI.MVVM"
+             x:DataType="vm:SymptomViewVM"
+			 x:Class="DA.AllergyJournal.MAUI.Views.SymptomPage"
+             Title="Allergietagebuch"
+             BackgroundColor="#0F172A">
+
+	<ScrollView>
+		<VerticalStackLayout Padding="20,24" Spacing="14">
+			<VerticalStackLayout Spacing="4" Margin="0,0,0,6">
+				<Label Text="Symptom-Erfassung"
+                       FontSize="24"
+                       FontAttributes="Bold"
+                       TextColor="#F8FAFC" />
+				<Label Text="Bewerten Sie die Intensität je Bereich von 0 (keine) bis 3 (stark)."
+                       FontSize="14"
+                       TextColor="#94A3B8" />
+			</VerticalStackLayout>
+
+			<!-- Datum -->
+			<Border BackgroundColor="#1E293B"
+                    Stroke="#334155"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16,12">
+				<Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+					<Label Grid.Column="0"
+                           Text="Datum"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#F8FAFC"
+                           VerticalOptions="Center" />
+					<DatePicker Grid.Column="1"
+                                Format="dd.MM.yyyy"
+                                TextColor="#F8FAFC"
+                                VerticalOptions="Center" />
+				</Grid>
+			</Border>
+
+			<!-- Nase -->
+			<Border BackgroundColor="#1E293B"
+                    Stroke="#334155"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16">
+				<VerticalStackLayout Spacing="10">
+					<Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+						<VerticalStackLayout Grid.Column="0" Spacing="2">
+							<Label Text="Nase"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+							<Label Text="Niesen, Juckreiz, Naselaufen oder Verstopfung"
+                                   FontSize="12"
+                                   TextColor="#94A3B8" />
+						</VerticalStackLayout>
+						<Border Grid.Column="1"
+                                BackgroundColor="#1E3A8A"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,5"
+                                VerticalOptions="Center">
+							<Label Text="{Binding NaseWert, StringFormat='{0:F0} / 3'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#BFDBFE" />
+						</Border>
+					</Grid>
+
+					<Slider Minimum="0"
+                            Maximum="3"
+                            Value="{Binding NaseWert, Mode=TwoWay}"
+                            MinimumTrackColor="#3B82F6"
+                            MaximumTrackColor="#334155"
+                            ThumbColor="#3B82F6" />
+					<Grid ColumnDefinitions="*,*,*,*" Margin="0,2,0,0">
+						<Label Grid.Column="0" Text="0 · Keine" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Start" />
+						<Label Grid.Column="1" Text="1 · Leicht" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="2" Text="2 · Mäßig" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="3" Text="3 · Stark" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="End" />
+					</Grid>
+				</VerticalStackLayout>
+			</Border>
+
+			<!-- Augen -->
+			<Border BackgroundColor="#1E293B"
+                    Stroke="#334155"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16">
+				<VerticalStackLayout Spacing="10">
+					<Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+						<VerticalStackLayout Grid.Column="0" Spacing="2">
+							<Label Text="Augen"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+							<Label Text="Rötung, Tränenfluss oder Juckreiz"
+                                   FontSize="12"
+                                   TextColor="#94A3B8" />
+						</VerticalStackLayout>
+						<Border Grid.Column="1"
+                                BackgroundColor="#1E3A8A"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,5"
+                                VerticalOptions="Center">
+							<Label Text="{Binding AugenWert, StringFormat='{0:F0} / 3'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#BFDBFE" />
+						</Border>
+					</Grid>
+
+					<Slider Minimum="0"
+                            Maximum="3"
+                            Value="{Binding AugenWert, Mode=TwoWay}"
+                            MinimumTrackColor="#3B82F6"
+                            MaximumTrackColor="#334155"
+                            ThumbColor="#3B82F6" />
+					<Grid ColumnDefinitions="*,*,*,*" Margin="0,2,0,0">
+						<Label Grid.Column="0" Text="0 · Keine" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Start" />
+						<Label Grid.Column="1" Text="1 · Leicht" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="2" Text="2 · Mäßig" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="3" Text="3 · Stark" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="End" />
+					</Grid>
+				</VerticalStackLayout>
+			</Border>
+
+			<!-- Lunge -->
+			<Border BackgroundColor="#1E293B"
+                    Stroke="#334155"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16">
+				<VerticalStackLayout Spacing="10">
+					<Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+						<VerticalStackLayout Grid.Column="0" Spacing="2">
+							<Label Text="Lunge"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+							<Label Text="Husten, Giemen oder Kurzatmigkeit"
+                                   FontSize="12"
+                                   TextColor="#94A3B8" />
+						</VerticalStackLayout>
+						<Border Grid.Column="1"
+                                BackgroundColor="#1E3A8A"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,5"
+                                VerticalOptions="Center">
+							<Label Text="{Binding LungeWert, StringFormat='{0:F0} / 3'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#BFDBFE" />
+						</Border>
+					</Grid>
+
+					<Slider Minimum="0"
+                            Maximum="3"
+                            Value="{Binding LungeWert, Mode=TwoWay}"
+                            MinimumTrackColor="#3B82F6"
+                            MaximumTrackColor="#334155"
+                            ThumbColor="#3B82F6" />
+					<Grid ColumnDefinitions="*,*,*,*" Margin="0,2,0,0">
+						<Label Grid.Column="0" Text="0 · Keine" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Start" />
+						<Label Grid.Column="1" Text="1 · Leicht" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="2" Text="2 · Mäßig" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="3" Text="3 · Stark" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="End" />
+					</Grid>
+				</VerticalStackLayout>
+			</Border>
+
+			<!-- Haut -->
+			<Border BackgroundColor="#1E293B"
+                    Stroke="#334155"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16">
+				<VerticalStackLayout Spacing="10">
+					<Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+						<VerticalStackLayout Grid.Column="0" Spacing="2">
+							<Label Text="Haut"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+							<Label Text="Rötung, Quaddeln, Trockenheit oder Juckreiz"
+                                   FontSize="12"
+                                   TextColor="#94A3B8" />
+						</VerticalStackLayout>
+						<Border Grid.Column="1"
+                                BackgroundColor="#1E3A8A"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 8"
+                                Padding="10,5"
+                                VerticalOptions="Center">
+							<Label Text="{Binding HautWert, StringFormat='{0:F0} / 3'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#BFDBFE" />
+						</Border>
+					</Grid>
+
+					<Slider Minimum="0"
+                            Maximum="3"
+                            Value="{Binding HautWert, Mode=TwoWay}"
+                            MinimumTrackColor="#3B82F6"
+                            MaximumTrackColor="#334155"
+                            ThumbColor="#3B82F6" />
+					<Grid ColumnDefinitions="*,*,*,*" Margin="0,2,0,0">
+						<Label Grid.Column="0" Text="0 · Keine" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Start" />
+						<Label Grid.Column="1" Text="1 · Leicht" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="2" Text="2 · Mäßig" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="Center" />
+						<Label Grid.Column="3" Text="3 · Stark" FontSize="11" TextColor="#94A3B8" HorizontalTextAlignment="End" />
+					</Grid>
+				</VerticalStackLayout>
+			</Border>
+
+			<!-- Gesamtübersicht & Aktionen -->
+			<Border BackgroundColor="#1E293B"
+                    Stroke="#334155"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16">
+				<VerticalStackLayout Spacing="14">
+					<Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+						<Label Grid.Column="0"
+                               Text="Gesamtscore"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="#F8FAFC"
+                               VerticalOptions="Center" />
+						<Label Grid.Column="1"
+                               Text="{Binding GesamtScore, StringFormat='{0} / 12'}"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#3B82F6"
+                               VerticalOptions="Center" />
+					</Grid>
+
+					<Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+						<Button Grid.Column="0"
+                                Text="Zurücksetzen"
+                                BackgroundColor="#334155"
+                                TextColor="#E2E8F0"
+                                CornerRadius="10"
+                                HeightRequest="46"
+                                FontAttributes="Bold"
+                                Command="{Binding ResetCommand}" />
+						<Button Grid.Column="1"
+                                Text="Speichern"
+                                BackgroundColor="#3B82F6"
+                                TextColor="#FFFFFF"
+                                CornerRadius="10"
+                                HeightRequest="46"
+                                FontAttributes="Bold"
+                                Command="{Binding SaveCommand}" />
+					</Grid>
+				</VerticalStackLayout>
+			</Border>
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

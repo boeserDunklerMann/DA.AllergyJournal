@@ -2,5 +2,6 @@
   <Project Path="DA.AllergyJournal.MAUI.Proto/DA.AllergyJournal.MAUI.Proto.csproj" Id="418bd48a-4609-4f48-8ca7-3c04737e84ee">
     <Deploy Solution="Debug|*" />
   </Project>
+  <Project Path="DA.AllergyJournal.MAUI/DA.AllergyJournal.MAUI.csproj" Id="eeccae4f-a155-4de6-8f93-39b0ecd42d96" />
   <Project Path="DA.AllergyJournal.Model/DA.AllergyJournal.Model.csproj" Id="a7f2e09b-e01b-42de-9f99-252f0ea60a76" />
 </Solution>

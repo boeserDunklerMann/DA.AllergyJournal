@@ -31,6 +31,9 @@ public partial class SymptomViewVM(DbContext ctx) : ObservableObject
 	public int GesamtScore =>
 		(int)(Math.Round(NaseWert) + Math.Round(AugenWert) + Math.Round(LungeWert) + Math.Round(HautWert));
 
+	[ObservableProperty]
+	private DateTime _dateWert;
+
 	[RelayCommand]
 	private void Reset()
 	{
@@ -43,10 +46,13 @@ public partial class SymptomViewVM(DbContext ctx) : ObservableObject
 	[RelayCommand]
 	private async Task SaveAsync()
 	{
-		// TODO: Werte (0..3) in Datenbank oder API speichern
-		await Shell.Current.DisplayAlertAsync(
-			"Erfasst",
-			$"Nase: {NaseWert:F0}, Augen: {AugenWert:F0}, Lunge: {LungeWert:F0}, Haut: {HautWert:F0}",
-			"OK");
+		// TODO DA: Werte (0..3) in Datenbank oder API speichern
+		//await Shell.Current.DisplayAlertAsync(
+		//	"Erfasst",
+		//	$"Nase: {NaseWert:F0}, Augen: {AugenWert:F0}, Lunge: {LungeWert:F0}, Haut: {HautWert:F0}",
+		//	"OK");
+		DailyJournalEntry today = ctx.CreateDailyEntry(DateWert, (int)Math.Round(NaseWert), (int)Math.Round(AugenWert),
+			(int)Math.Round(LungeWert), (int)Math.Round(HautWert));
+		await ctx.SaveAsync(today);
 	}
 }

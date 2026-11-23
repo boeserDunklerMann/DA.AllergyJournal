@@ -35,7 +35,7 @@
 					<DatePicker Grid.Column="1"
                                 Format="dd.MM.yyyy"
                                 TextColor="#F8FAFC"
-                                VerticalOptions="Center" />
+                                VerticalOptions="Center" Date="{Binding Date}" />
 				</Grid>
 			</Border>
 

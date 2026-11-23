@@ -58,5 +58,22 @@ namespace DA.AllergyJournal.Model
 			await Init();
 			return await _db!.DeleteAsync(entry);
 		}
+
+		public MonthlyJournalEntry CreateMonthlyEntry(DateTime date)
+		{
+			return new() { Month = date.Month, Year = date.Year };
+		}
+
+		public DailyJournalEntry CreateDailyEntry(DateTime date, int nose, int eyes, int lung, int skin)
+		{
+			return new()
+			{
+				StoredDate = date,
+				Nose = (LevelOfPain)nose,
+				Eyes = (LevelOfPain)eyes,
+				Lung = (LevelOfPain)lung,
+				Skin = (LevelOfPain)skin
+			};
+		}
 	}
 }

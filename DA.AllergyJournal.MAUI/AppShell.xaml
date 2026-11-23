@@ -5,11 +5,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:DA.AllergyJournal.MAUI"
 	xmlns:views="clr-namespace:DA.AllergyJournal.MAUI.Views"
-    Title="DA.AllergyJournal.MAUI">
+    Title="DA.AllergyJournal.MAUI"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarIsVisible="False">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:SymptomPage}"
-        Route="SymptomPage" />
+    <!-- Navigation erfolgt über das Hamburger-Menü (Views/AppMenu.cs) -->
+    <TabBar>
+        <ShellContent
+            Title="Erfassen"
+            ContentTemplate="{DataTemplate views:SymptomPage}"
+            Route="SymptomPage" />
+        <ShellContent
+            Title="Übersicht"
+            ContentTemplate="{DataTemplate views:ListJournal}"
+            Route="ListJournal" />
+    </TabBar>
 
 </Shell>

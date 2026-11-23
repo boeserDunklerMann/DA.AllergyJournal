@@ -4,23 +4,31 @@ using DA.AllergyJournal.Model;
 
 namespace DA.AllergyJournal.MAUI.MVVM;
 
-public partial class SymptomViewVM(DbContext ctx) : ObservableObject
+public partial class SymptomViewVM : ObservableObject
 {
-	[ObservableProperty]
-	[NotifyPropertyChangedFor(nameof(GesamtScore))]
-	private double _naseWert;
+	private readonly DbContext ctx;
+
+	public SymptomViewVM(DbContext ctx)
+	{
+		this.ctx = ctx;
+		DateWert = DateTime.Today;
+	}
 
 	[ObservableProperty]
 	[NotifyPropertyChangedFor(nameof(GesamtScore))]
-	private double _augenWert;
+	public partial double NaseWert { get; set; }
 
 	[ObservableProperty]
 	[NotifyPropertyChangedFor(nameof(GesamtScore))]
-	private double _lungeWert;
+	public partial double AugenWert { get; set; }
 
 	[ObservableProperty]
 	[NotifyPropertyChangedFor(nameof(GesamtScore))]
-	private double _hautWert;
+	public partial double LungeWert { get; set; }
+
+	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(GesamtScore))]
+	public partial double HautWert { get; set; }
 
 	// Runden auf diskrete Ganzzahlen (0 bis 3)
 	partial void OnNaseWertChanged(double value) => NaseWert = Math.Clamp(Math.Round(value), 0, 3);
@@ -32,7 +40,7 @@ public partial class SymptomViewVM(DbContext ctx) : ObservableObject
 		(int)(Math.Round(NaseWert) + Math.Round(AugenWert) + Math.Round(LungeWert) + Math.Round(HautWert));
 
 	[ObservableProperty]
-	private DateTime _dateWert;
+	public partial DateTime DateWert { get; set; }
 
 	[RelayCommand]
 	private void Reset()
@@ -41,16 +49,13 @@ public partial class SymptomViewVM(DbContext ctx) : ObservableObject
 		AugenWert = 0;
 		LungeWert = 0;
 		HautWert = 0;
+		DateWert = DateTime.Today;
 	}
 
 	[RelayCommand]
 	private async Task SaveAsync()
 	{
-		// TODO DA: Werte (0..3) in Datenbank oder API speichern
-		//await Shell.Current.DisplayAlertAsync(
-		//	"Erfasst",
-		//	$"Nase: {NaseWert:F0}, Augen: {AugenWert:F0}, Lunge: {LungeWert:F0}, Haut: {HautWert:F0}",
-		//	"OK");
+		// DONE DA: Werte (0..3) in Datenbank oder API speichern
 		DailyJournalEntry today = ctx.CreateDailyEntry(DateWert, (int)Math.Round(NaseWert), (int)Math.Round(AugenWert),
 			(int)Math.Round(LungeWert), (int)Math.Round(HautWert));
 		await ctx.SaveAsync(today);

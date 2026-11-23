@@ -24,6 +24,7 @@ namespace DA.AllergyJournal.MAUI
 			builder.Services.AddSingleton(_ => new Model.DbContext(Path.Combine(FileSystem.AppDataDirectory, "app.db3")));
 			builder.Services.AddTransient<MVVM.SymptomViewVM>();
 			builder.Services.AddTransient<Views.SymptomPage>();
+			builder.Services.AddTransient<Views.ListJournal>();
 
 			return builder.Build();
 		}

@@ -1,7 +1,7 @@
 ﻿namespace DA.AllergyJournal.MAUI.Views
 {
 	/// <ChangeLog>
-	/// <Create Datum="18.11.2026" Entwickler="DA" />
+	/// <Create Datum="23.11.2026" Entwickler="DA" />
 	/// </ChangeLog>
 	public partial class SymptomPage : ContentPage
 	{
@@ -10,6 +10,7 @@
 		{
 			InitializeComponent();
 			BindingContext = _viewModel = viewModel;
+			AppMenu.AddTo(this);
 		}
 		protected override async void OnAppearing()
 		{

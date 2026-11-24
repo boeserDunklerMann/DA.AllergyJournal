@@ -27,6 +27,17 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <!-- Allergietagebuch: dunkles Farbschema der Seiten (SymptomPage, ListJournal) -->
+    <Color x:Key="AppBackground">#0F172A</Color>          <!-- Seitenhintergrund -->
+    <Color x:Key="AppSurface">#1E293B</Color>             <!-- Karten -->
+    <Color x:Key="AppBorder">#334155</Color>              <!-- Kartenrand, inaktive Slider-Spur, Zweit-Button -->
+    <Color x:Key="AppText">#F8FAFC</Color>                <!-- Haupttext -->
+    <Color x:Key="AppTextSecondary">#94A3B8</Color>       <!-- Nebentext, Beschriftungen -->
+    <Color x:Key="AppAccent">#3B82F6</Color>              <!-- Akzent: Slider, Speichern, Score, Refresh -->
+    <Color x:Key="AppBadgeBackground">#1E3A8A</Color>     <!-- Wert-Badge Hintergrund -->
+    <Color x:Key="AppBadgeText">#BFDBFE</Color>           <!-- Wert-Badge Text -->
+    <Color x:Key="AppButtonSecondaryText">#E2E8F0</Color> <!-- Text auf Zweit-Button -->
+
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>

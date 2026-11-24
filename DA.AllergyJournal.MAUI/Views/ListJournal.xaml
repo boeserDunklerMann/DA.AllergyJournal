@@ -1,176 +1,136 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DA.AllergyJournal.MAUI.MVVM"
-			 xmlns:model="clr-namespace:DA.AllergyJournal;assembly=DA.AllergyJournal.Model"
-			 xmlns:local="clr-namespace:DA.AllergyJournal.MAUI.Views"
+			 xmlns:model="clr-namespace:DA.AllergyJournal.Model;assembly=DA.AllergyJournal.Model"
+			 xmlns:conv="clr-namespace:DA.AllergyJournal.MAUI.Converters"
 			 x:DataType="vm:ListJournalVM"
 			 x:Class="DA.AllergyJournal.MAUI.Views.ListJournal"
 			 Title="Dein Tagebuch"
-			 BackgroundColor="{AppThemeBinding Light=#F8FAFC, Dark=#0F172A}">
-	
+			 BackgroundColor="{StaticResource AppBackground}">
+
+	<!-- Farben (App*) zentral in Resources/Styles/Colors.xaml -->
+	<ContentPage.Resources>
+		<conv:LevelOfPainToTextConverter x:Key="LevelOfPainToText" />
+
+		<!-- Beschriftung eines Symptoms (Nase, Augen, ...) -->
+		<Style x:Key="SymptomCaption" TargetType="Label">
+			<Setter Property="FontSize" Value="11" />
+			<Setter Property="TextColor" Value="{StaticResource AppTextSecondary}" />
+			<Setter Property="HorizontalTextAlignment" Value="Center" />
+		</Style>
+		<!-- Wert-Badge eines Symptoms, wie die "x / 3"-Anzeige der SymptomPage -->
+		<Style x:Key="SymptomBadge" TargetType="Border">
+			<Setter Property="BackgroundColor" Value="{StaticResource AppBadgeBackground}" />
+			<Setter Property="StrokeThickness" Value="0" />
+			<Setter Property="StrokeShape" Value="RoundRectangle 8" />
+			<Setter Property="Padding" Value="6,4" />
+		</Style>
+		<Style x:Key="SymptomValue" TargetType="Label">
+			<Setter Property="FontSize" Value="13" />
+			<Setter Property="FontAttributes" Value="Bold" />
+			<Setter Property="TextColor" Value="{StaticResource AppBadgeText}" />
+			<Setter Property="HorizontalTextAlignment" Value="Center" />
+		</Style>
+	</ContentPage.Resources>
+
 	<ContentPage.ToolbarItems>
-		<ToolbarItem Text="Importieren"
-                     Command="{Binding AusAndererAppImportierenCommand}"
-                     Order="Primary"
-                     Priority="0" />
 		<ToolbarItem Text="Neu"
                      Command="{Binding NeuesElementHinzufuegenCommand}"
                      Order="Primary"
-                     Priority="1" />
+                     Priority="0" />
 	</ContentPage.ToolbarItems>
-	<Grid RowDefinitions="Auto, Auto, *">
-		<!-- Suchleiste zur Filterung der Elemente (z. B. Nase, Auge, Lunge, Haut) -->
-		<Border Grid.Row="0"
-                Margin="16,12,16,8"
-                Padding="4,0"
-                StrokeShape="RoundRectangle 12"
-                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
-                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}">
-			<SearchBar Placeholder="Elemente durchsuchen (Nase, Auge, Lunge, Haut)..."
-                       Text="{Binding Suchbegriff, Mode=TwoWay}"
-                       SearchCommand="{Binding FilterAnwendenCommand}"
-                       CancelButtonColor="#512BD4" />
-		</Border>
-		<!-- Horizontale Kategorie-Auswahl -->
-		<ScrollView Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalScrollBarVisibility="Never"
-                    Margin="16,0,16,8">
-			<HorizontalStackLayout Spacing="8"
-                                   BindableLayout.ItemsSource="{Binding Kategorien}">
-				<BindableLayout.ItemTemplate>
-					<DataTemplate x:DataType="x:String">
-						<Button Text="{Binding .}"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ElementeListeViewModel}}, Path=KategorieWaehlenCommand}"
-                                CommandParameter="{Binding .}"
-                                Padding="14,6"
-                                CornerRadius="8"
-                                FontSize="13"
-                                BackgroundColor="{AppThemeBinding Light=#F1F5F9, Dark=#1E293B}"
-                                TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}" />
-					</DataTemplate>
-				</BindableLayout.ItemTemplate>
-			</HorizontalStackLayout>
-		</ScrollView>
-		<RefreshView Grid.Row="2"
-                     IsRefreshing="{Binding WirdGeladen}"
-                     Command="{Binding AktualisierenCommand}"
-                     RefreshColor="#512BD4">
-			<CollectionView ItemsSource="{Binding  Dailies}"
-                            SelectionMode="None"
-                            Margin="16,4,16,16">
-				<CollectionView.ItemsLayout>
-					<LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="10" />
-				</CollectionView.ItemsLayout>
 
-				<CollectionView.EmptyView>
-					<VerticalStackLayout VerticalOptions="Center"
-                                         HorizontalOptions="Center"
-                                         Spacing="10"
-                                         Padding="32">
-						<Label Text="Keine Elemente gefunden"
-                               FontSize="17"
-                               FontAttributes="Bold"
-                               HorizontalTextAlignment="Center" />
-						<Label Text="Importieren Sie Elemente aus der anderen App oder setzen Sie die Filter zurück."
-                               FontSize="13"
-                               TextColor="#64748B"
-                               HorizontalTextAlignment="Center" />
-						<Button Text="Filter zurücksetzen"
-                                Command="{Binding FilterZuruecksetzenCommand}"
-                                BackgroundColor="#512BD4"
-                                TextColor="White"
-                                CornerRadius="8"
-                                Padding="16,8" />
-					</VerticalStackLayout>
-				</CollectionView.EmptyView>
+	<!-- Nach unten ziehen lädt die Einträge neu -->
+	<RefreshView IsRefreshing="{Binding WirdGeladen, Mode=TwoWay}"
+                 Command="{Binding AktualisierenCommand}"
+                 RefreshColor="{StaticResource AppAccent}">
+		<CollectionView ItemsSource="{Binding Dailies}"
+                        SelectionMode="None"
+                        Margin="20,16,20,16">
+			<CollectionView.ItemsLayout>
+				<LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="14" />
+			</CollectionView.ItemsLayout>
 
-				<CollectionView.ItemTemplate>
-					<DataTemplate x:DataType="models:DailyJournalEntry">
-						<SwipeView>
-							<SwipeView.RightItems>
-								<SwipeItems Mode="Execute">
-									<SwipeItem Text="Löschen"
-                                           BackgroundColor="#DC2626"
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ElementeListeViewModel}}, Path=ElementLoeschenCommand}"
-                                           CommandParameter="{Binding .}" />
-								</SwipeItems>
-							</SwipeView.RightItems>
+			<CollectionView.EmptyView>
+				<VerticalStackLayout VerticalOptions="Center"
+                                     HorizontalOptions="Center"
+                                     Spacing="10"
+                                     Padding="32">
+					<Label Text="Noch keine Einträge"
+                           FontSize="17"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AppText}"
+                           HorizontalTextAlignment="Center" />
+					<Label Text="Erfasse deinen ersten Tag über „Neu“."
+                           FontSize="13"
+                           TextColor="{StaticResource AppTextSecondary}"
+                           HorizontalTextAlignment="Center" />
+					<Button Text="Neuer Eintrag"
+                            Command="{Binding NeuesElementHinzufuegenCommand}"
+                            BackgroundColor="{StaticResource AppAccent}"
+                            TextColor="{StaticResource White}"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            HeightRequest="46"
+                            Padding="16,0" />
+				</VerticalStackLayout>
+			</CollectionView.EmptyView>
 
-							<Border Padding="14"
-                                StrokeShape="RoundRectangle 14"
-                                Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#334155}"
-                                BackgroundColor="{AppThemeBinding Light=#FFFFFF, Dark=#1E293B}">
-								<Border.GestureRecognizers>
-									<TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ElementeListeViewModel}}, Path=ElementOeffnenCommand}"
-                                    CommandParameter="{Binding .}" />
-								</Border.GestureRecognizers>
+			<!-- Ein Tageseintrag: Datum, vier Symptome, Medikamente -->
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="model:DailyJournalEntry">
+					<Border BackgroundColor="{StaticResource AppSurface}"
+                            Stroke="{StaticResource AppBorder}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="16">
+						<Grid ColumnDefinitions="*, *, *, *"
+                              RowDefinitions="Auto, Auto, Auto, Auto"
+                              ColumnSpacing="8"
+                              RowSpacing="4">
 
-								<Grid ColumnDefinitions="44, *, Auto"
-                                  RowDefinitions="Auto, Auto, Auto"
-                                  ColumnSpacing="12"
-                                  RowSpacing="4">
+							<Label Grid.Row="0" Grid.ColumnSpan="4"
+                                   Text="{Binding StoredDate, StringFormat='{0:dddd, dd.MM.yyyy}'}"
+                                   FontSize="17"
+                                   FontAttributes="Bold"
+                                   Margin="0,0,0,8"
+                                   TextColor="{StaticResource AppText}" />
 
-									<!-- Element-Initial / Farbindikator -->
-									<Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                                        WidthRequest="44"
-                                        HeightRequest="44"
-                                        StrokeThickness="0"
-                                        StrokeShape="RoundRectangle 10"
-                                        BackgroundColor="{Binding AkzentFarbe}"
-                                        VerticalOptions="Start">
-										<Label Text="{Binding Initial}"
-                                           TextColor="White"
-                                           FontAttributes="Bold"
-                                           FontSize="17"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center" />
-									</Border>
+							<Label Grid.Row="1" Grid.Column="0" Text="Nase" Style="{StaticResource SymptomCaption}" />
+							<Label Grid.Row="1" Grid.Column="1" Text="Augen" Style="{StaticResource SymptomCaption}" />
+							<Label Grid.Row="1" Grid.Column="2" Text="Lunge" Style="{StaticResource SymptomCaption}" />
+							<Label Grid.Row="1" Grid.Column="3" Text="Haut" Style="{StaticResource SymptomCaption}" />
 
-									<!-- Name & Kategorie -->
-									<Label Grid.Row="0" Grid.Column="1"
-                                       Text="{Binding Name}"
-                                       FontSize="16"
-                                       FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light=#0F172A, Dark=#F8FAFC}"
-                                       LineBreakMode="TailTruncation" />
-
-									<Label Grid.Row="0" Grid.Column="2"
-                                       Text="{Binding Status}"
-                                       FontSize="12"
-                                       VerticalOptions="Center"
-                                       TextColor="#512BD4" />
-
-									<!-- Metadatenzeile (Kategorie · System) -->
-									<Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-                                       FontSize="12"
-                                       TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}"
-                                       LineBreakMode="TailTruncation">
-										<Label.FormattedText>
-											<FormattedString>
-												<Span Text="{Binding Kategorie}" />
-												<Span Text=" · " />
-												<Span Text="{Binding System}" />
-											</FormattedString>
-										</Label.FormattedText>
-									</Label>
-
-									<!-- Kurzbeschreibung -->
-									<Label Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
-                                       Text="{Binding Kurzbeschreibung}"
-                                       FontSize="13"
-                                       MaxLines="2"
-                                       LineBreakMode="TailTruncation"
-                                       Margin="0,4,0,0"
-                                       TextColor="{AppThemeBinding Light=#334155, Dark=#CBD5E1}" />
-								</Grid>
+							<Border Grid.Row="2" Grid.Column="0" Style="{StaticResource SymptomBadge}">
+								<Label Text="{Binding Nose, Converter={StaticResource LevelOfPainToText}}" Style="{StaticResource SymptomValue}" />
 							</Border>
-						</SwipeView>
-					</DataTemplate>
-				</CollectionView.ItemTemplate>
-			</CollectionView>
-		</RefreshView>
-	</Grid>
+							<Border Grid.Row="2" Grid.Column="1" Style="{StaticResource SymptomBadge}">
+								<Label Text="{Binding Eyes, Converter={StaticResource LevelOfPainToText}}" Style="{StaticResource SymptomValue}" />
+							</Border>
+							<Border Grid.Row="2" Grid.Column="2" Style="{StaticResource SymptomBadge}">
+								<Label Text="{Binding Lung, Converter={StaticResource LevelOfPainToText}}" Style="{StaticResource SymptomValue}" />
+							</Border>
+							<Border Grid.Row="2" Grid.Column="3" Style="{StaticResource SymptomBadge}">
+								<Label Text="{Binding Skin, Converter={StaticResource LevelOfPainToText}}" Style="{StaticResource SymptomValue}" />
+							</Border>
+
+							<Label Grid.Row="3" Grid.ColumnSpan="4"
+                                   Margin="0,10,0,0"
+                                   FontSize="12"
+                                   LineBreakMode="TailTruncation"
+                                   TextColor="{StaticResource AppTextSecondary}">
+								<Label.FormattedText>
+									<FormattedString>
+										<Span Text="Medikamente: " />
+										<Span Text="{Binding Medicine, TargetNullValue='keine'}" />
+									</FormattedString>
+								</Label.FormattedText>
+							</Label>
+						</Grid>
+					</Border>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+	</RefreshView>
 </ContentPage>

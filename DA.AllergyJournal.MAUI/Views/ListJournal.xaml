@@ -1,6 +1,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DA.AllergyJournal.MAUI.MVVM"
+			 xmlns:model="clr-namespace:DA.AllergyJournal;assembly=DA.AllergyJournal.Model"
 			 xmlns:local="clr-namespace:DA.AllergyJournal.MAUI.Views"
 			 x:DataType="vm:ListJournalVM"
 			 x:Class="DA.AllergyJournal.MAUI.Views.ListJournal"
@@ -55,7 +56,7 @@
                      IsRefreshing="{Binding WirdGeladen}"
                      Command="{Binding AktualisierenCommand}"
                      RefreshColor="#512BD4">
-			<CollectionView ItemsSource="{Binding GefilterteElemente}"
+			<CollectionView ItemsSource="{Binding  Dailies}"
                             SelectionMode="None"
                             Margin="16,4,16,16">
 				<CollectionView.ItemsLayout>
@@ -86,7 +87,7 @@
 				</CollectionView.EmptyView>
 
 				<CollectionView.ItemTemplate>
-					<DataTemplate x:DataType="models:ErzeugtesElement">
+					<DataTemplate x:DataType="models:DailyJournalEntry">
 						<SwipeView>
 							<SwipeView.RightItems>
 								<SwipeItems Mode="Execute">

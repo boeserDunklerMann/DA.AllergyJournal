@@ -7,10 +7,12 @@ namespace DA.AllergyJournal.MAUI.MVVM;
 public partial class SymptomViewVM : ObservableObject
 {
 	private readonly DbContext ctx;
+	private readonly Services.INavigationService nav;
 
-	public SymptomViewVM(DbContext ctx)
+	public SymptomViewVM(DbContext ctx, Services.INavigationService nav)
 	{
 		this.ctx = ctx;
+		this.nav = nav;
 		DateWert = DateTime.Today;
 	}
 
@@ -59,5 +61,14 @@ public partial class SymptomViewVM : ObservableObject
 		DailyJournalEntry today = ctx.CreateDailyEntry(DateWert, (int)Math.Round(NaseWert), (int)Math.Round(AugenWert),
 			(int)Math.Round(LungeWert), (int)Math.Round(HautWert));
 		await ctx.SaveAsync(today);
+
+		// Als Unterseite (aus der Liste geöffnet) zurück zur Liste, als Tab das Formular leeren
+		if (nav.CanGoBack)
+			await nav.GoBackAsync();
+	}
+
+	public async Task OnInit()
+	{
+		await Task.CompletedTask;
 	}
 }

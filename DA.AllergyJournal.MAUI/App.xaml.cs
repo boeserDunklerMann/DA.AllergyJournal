@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace DA.AllergyJournal.MAUI
+﻿namespace DA.AllergyJournal.MAUI
 {
 	public partial class App : Application
 	{
@@ -11,6 +9,7 @@ namespace DA.AllergyJournal.MAUI
 
 		protected override Window CreateWindow(IActivationState? activationState)
 		{
+			Routing.RegisterRoute(AppShell.ErfassenNeuRoute, typeof(Views.SymptomPage));
 			return new Window(new AppShell());
 		}
 	}

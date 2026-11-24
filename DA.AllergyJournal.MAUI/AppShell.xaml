@@ -10,11 +10,8 @@
     Shell.TabBarIsVisible="False">
 
     <!-- Navigation erfolgt über das Hamburger-Menü (Views/AppMenu.cs) -->
+    <!-- "Erfassen" ist kein Tab, sondern die Unterseite "ErfassenNeu" (siehe AppShell.xaml.cs) -->
     <TabBar>
-        <ShellContent
-            Title="Erfassen"
-            ContentTemplate="{DataTemplate views:SymptomPage}"
-            Route="SymptomPage" />
         <ShellContent
             Title="Übersicht"
             ContentTemplate="{DataTemplate views:ListJournal}"

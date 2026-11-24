@@ -6,11 +6,18 @@ namespace DA.AllergyJournal.MAUI.Views
 	public partial class ListJournal : ContentPage
 	{
 		// TODO DA: add ViewModel
-
-		public ListJournal()
+		private readonly MVVM.ListJournalVM _viewModel;
+		public ListJournal(MVVM.ListJournalVM viewModel)
 		{
 			InitializeComponent();
 			AppMenu.AddTo(this);
+			BindingContext = _viewModel = viewModel;
+		}
+
+		protected override async void OnAppearing()
+		{
+			base.OnAppearing();
+			await _viewModel.OnInit();
 		}
 	}
 }

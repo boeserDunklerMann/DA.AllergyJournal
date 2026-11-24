@@ -3,8 +3,9 @@
 namespace DA.AllergyJournal.MAUI
 {
 	/// <ChangeLog>
-		/// <Create Datum="18.11.2026" Entwickler="DA" />
-		/// </ChangeLog>
+	/// <Create Datum="18.11.2026" Entwickler="DA" />
+	/// <Change Datum="24.11.2026" Entwickler="DA">add ListJournalVM</Change>
+	/// </ChangeLog>
 	public static class MauiProgram
 	{
 		public static MauiApp CreateMauiApp()
@@ -22,7 +23,9 @@ namespace DA.AllergyJournal.MAUI
 			builder.Logging.AddDebug();
 #endif
 			builder.Services.AddSingleton(_ => new Model.DbContext(Path.Combine(FileSystem.AppDataDirectory, "app.db3")));
+			builder.Services.AddSingleton<Services.INavigationService, Services.ShellNavigationService>();
 			builder.Services.AddTransient<MVVM.SymptomViewVM>();
+			builder.Services.AddTransient<MVVM.ListJournalVM>();
 			builder.Services.AddTransient<Views.SymptomPage>();
 			builder.Services.AddTransient<Views.ListJournal>();
 

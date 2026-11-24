@@ -30,7 +30,8 @@ public static class AppMenu
 				await Shell.Current.GoToAsync("//ListJournal");
 				break;
 			case Erfassen:
-				await Shell.Current.GoToAsync("//SymptomPage");
+				// Immer als Unterseite der Übersicht öffnen: Zurück führt zur Liste, kein Stapeln bei Mehrfachaufruf
+				await Shell.Current.GoToAsync($"//ListJournal/{AppShell.ErfassenNeuRoute}");
 				break;
 			case Beenden:
 				Application.Current?.Quit();

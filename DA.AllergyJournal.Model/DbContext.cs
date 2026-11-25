@@ -8,7 +8,8 @@ namespace DA.AllergyJournal.Model
 	/// <ChangeLog>
 	/// <Create Datum="18.11.2026" Entwickler="DA" />
 	/// <Change Datum="18.11.2026" Entwickler="DA">complete FUCK (ToDo-Nr. #4)</Change>
-		/// </ChangeLog>
+	/// <Change Datum="25.11.2026" Entwickler="DA">CreateDailyEntry um Weather erweitert</Change>
+	/// </ChangeLog>
 	public class DbContext(string databasePath)
 	{
 		private SQLiteAsyncConnection? _db;
@@ -64,7 +65,7 @@ namespace DA.AllergyJournal.Model
 			return new() { Month = date.Month, Year = date.Year };
 		}
 
-		public DailyJournalEntry CreateDailyEntry(DateTime date, int nose, int eyes, int lung, int skin)
+		public DailyJournalEntry CreateDailyEntry(DateTime date, int nose, int eyes, int lung, int skin, Weather weather)
 		{
 			return new()
 			{
@@ -72,7 +73,8 @@ namespace DA.AllergyJournal.Model
 				Nose = (LevelOfPain)nose,
 				Eyes = (LevelOfPain)eyes,
 				Lung = (LevelOfPain)lung,
-				Skin = (LevelOfPain)skin
+				Skin = (LevelOfPain)skin,
+				Weather = weather
 			};
 		}
 	}

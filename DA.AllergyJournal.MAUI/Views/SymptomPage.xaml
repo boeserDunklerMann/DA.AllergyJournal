@@ -219,6 +219,65 @@
 				</VerticalStackLayout>
 			</Border>
 
+			<!-- Wetter -->
+			<Border BackgroundColor="{StaticResource AppSurface}"
+                    Stroke="{StaticResource AppBorder}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16">
+				<VerticalStackLayout Spacing="10">
+					<VerticalStackLayout Spacing="2">
+						<Label Text="Wetter"
+                               FontSize="17"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource AppText}" />
+						<Label Text="Wie war das Wetter an diesem Tag?"
+                               FontSize="12"
+                               TextColor="{StaticResource AppTextSecondary}" />
+					</VerticalStackLayout>
+
+					<CollectionView ItemsSource="{Binding WetterOptionen}"
+                                    SelectedItem="{Binding WetterWert, Mode=TwoWay}"
+                                    SelectionMode="Single"
+                                    HeightRequest="104">
+						<CollectionView.ItemsLayout>
+							<GridItemsLayout Orientation="Vertical" Span="3" HorizontalItemSpacing="10" />
+						</CollectionView.ItemsLayout>
+						<CollectionView.ItemTemplate>
+							<DataTemplate x:DataType="vm:WeatherOption">
+								<Border BackgroundColor="{StaticResource AppBackground}"
+                                        Stroke="{StaticResource AppBorder}"
+                                        StrokeThickness="2"
+                                        StrokeShape="RoundRectangle 12"
+                                        Padding="8">
+									<VisualStateManager.VisualStateGroups>
+										<VisualStateGroup Name="CommonStates">
+											<VisualState Name="Normal" />
+											<VisualState Name="Selected">
+												<VisualState.Setters>
+													<Setter Property="Stroke" Value="{StaticResource AppAccent}" />
+													<Setter Property="BackgroundColor" Value="{StaticResource AppBadgeBackground}" />
+												</VisualState.Setters>
+											</VisualState>
+										</VisualStateGroup>
+									</VisualStateManager.VisualStateGroups>
+									<VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+										<Image Source="{Binding Image}"
+                                               WidthRequest="48"
+                                               HeightRequest="48"
+                                               SemanticProperties.Description="{Binding Text}" />
+										<Label Text="{Binding Text}"
+                                               FontSize="12"
+                                               HorizontalTextAlignment="Center"
+                                               TextColor="{StaticResource AppText}" />
+									</VerticalStackLayout>
+								</Border>
+							</DataTemplate>
+						</CollectionView.ItemTemplate>
+					</CollectionView>
+				</VerticalStackLayout>
+			</Border>
+
 			<!-- Gesamtübersicht & Aktionen -->
 			<Border BackgroundColor="{StaticResource AppSurface}"
                     Stroke="{StaticResource AppBorder}"

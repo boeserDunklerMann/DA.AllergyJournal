@@ -51,6 +51,10 @@ public partial class SymptomViewVM : ObservableObject
 	[ObservableProperty]
 	public partial WeatherOption WetterWert { get; set; } = WeatherOption.All[0];
 
+	/// <summary>Eingenommene Medikamente (Freitext), wird beim Speichern nach DailyJournalEntry.Medicine übernommen.</summary>
+	[ObservableProperty]
+	public partial string? MedikamenteWert { get; set; }
+
 	[RelayCommand]
 	private void Reset()
 	{
@@ -60,6 +64,7 @@ public partial class SymptomViewVM : ObservableObject
 		HautWert = 0;
 		DateWert = DateTime.Today;
 		WetterWert = WeatherOption.All[0];
+		MedikamenteWert = null;
 	}
 
 	[RelayCommand]
@@ -67,7 +72,9 @@ public partial class SymptomViewVM : ObservableObject
 	{
 		// DONE DA: Werte (0..3) in Datenbank oder API speichern
 		DailyJournalEntry today = ctx.CreateDailyEntry(DateWert, (int)Math.Round(NaseWert), (int)Math.Round(AugenWert),
-			(int)Math.Round(LungeWert), (int)Math.Round(HautWert), WetterWert.Value);
+			(int)Math.Round(LungeWert), (int)Math.Round(HautWert), WetterWert.Value,
+			// leere Eingabe als null speichern, damit die Liste "keine" anzeigt
+			string.IsNullOrWhiteSpace(MedikamenteWert) ? null : MedikamenteWert.Trim());
 		await ctx.SaveAsync(today);
 
 		// Als Unterseite (aus der Liste geöffnet) zurück zur Liste, als Tab das Formular leeren

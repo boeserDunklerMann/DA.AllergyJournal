@@ -278,6 +278,39 @@
 				</VerticalStackLayout>
 			</Border>
 
+			<!-- Medikamente -->
+			<Border BackgroundColor="{StaticResource AppSurface}"
+                    Stroke="{StaticResource AppBorder}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14"
+                    Padding="16">
+				<VerticalStackLayout Spacing="10">
+					<VerticalStackLayout Spacing="2">
+						<Label Text="Medikamente"
+                               FontSize="17"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource AppText}" />
+						<Label Text="Welche Medikamente haben Sie eingenommen?"
+                               FontSize="12"
+                               TextColor="{StaticResource AppTextSecondary}" />
+					</VerticalStackLayout>
+
+					<Border BackgroundColor="{StaticResource AppBackground}"
+                            Stroke="{StaticResource AppBorder}"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="10,0">
+						<Entry Text="{Binding MedikamenteWert, Mode=TwoWay}"
+                               Placeholder="z. B. Cetirizin 10 mg"
+                               PlaceholderColor="{StaticResource AppTextSecondary}"
+                               TextColor="{StaticResource AppText}"
+                               FontSize="14"
+                               ClearButtonVisibility="WhileEditing"
+                               SemanticProperties.Description="Medikamente" />
+					</Border>
+				</VerticalStackLayout>
+			</Border>
+
 			<!-- Gesamtübersicht & Aktionen -->
 			<Border BackgroundColor="{StaticResource AppSurface}"
                     Stroke="{StaticResource AppBorder}"

@@ -9,6 +9,7 @@ namespace DA.AllergyJournal.Model
 	/// <Create Datum="18.11.2026" Entwickler="DA" />
 	/// <Change Datum="18.11.2026" Entwickler="DA">complete FUCK (ToDo-Nr. #4)</Change>
 	/// <Change Datum="25.11.2026" Entwickler="DA">CreateDailyEntry um Weather erweitert</Change>
+	/// <Change Datum="25.11.2026" Entwickler="DA">CreateDailyEntry um Medicine erweitert</Change>
 	/// </ChangeLog>
 	public class DbContext(string databasePath)
 	{
@@ -65,7 +66,7 @@ namespace DA.AllergyJournal.Model
 			return new() { Month = date.Month, Year = date.Year };
 		}
 
-		public DailyJournalEntry CreateDailyEntry(DateTime date, int nose, int eyes, int lung, int skin, Weather weather)
+		public DailyJournalEntry CreateDailyEntry(DateTime date, int nose, int eyes, int lung, int skin, Weather weather, string? medicine)
 		{
 			return new()
 			{
@@ -74,7 +75,8 @@ namespace DA.AllergyJournal.Model
 				Eyes = (LevelOfPain)eyes,
 				Lung = (LevelOfPain)lung,
 				Skin = (LevelOfPain)skin,
-				Weather = weather
+				Weather = weather,
+				Medicine = medicine
 			};
 		}
 	}

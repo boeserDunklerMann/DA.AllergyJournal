@@ -26,6 +26,7 @@ namespace DA.AllergyJournal.MAUI
 			builder.Services.AddSingleton<Services.INavigationService, Services.ShellNavigationService>();
 			builder.Services.AddTransient<MVVM.SymptomViewVM>();
 			builder.Services.AddTransient<MVVM.ListJournalVM>();
+			builder.Services.AddTransient<MVVM.DashboardVM>();
 			builder.Services.AddTransient<Views.SymptomPage>();
 			builder.Services.AddTransient<Views.ListJournal>();
 

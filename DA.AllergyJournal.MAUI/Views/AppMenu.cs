@@ -6,6 +6,7 @@ namespace DA.AllergyJournal.MAUI.Views;
 public static class AppMenu
 {
 	private const string Uebersicht = "Übersicht";
+	private const string Dashboard = "Dashboard";
 	private const string Erfassen = "Erfassen";
 	private const string Beenden = "Beenden";
 
@@ -23,7 +24,7 @@ public static class AppMenu
 
 	private static async Task ShowAsync(Page page)
 	{
-		string? auswahl = await page.DisplayActionSheetAsync("Menü", "Abbrechen", null, Uebersicht, Erfassen, Beenden);
+		string? auswahl = await page.DisplayActionSheetAsync("Menü", "Abbrechen", null, Uebersicht, Dashboard, Erfassen, Beenden);
 		switch (auswahl)
 		{
 			case Uebersicht:
@@ -32,6 +33,9 @@ public static class AppMenu
 			case Erfassen:
 				// Immer als Unterseite der Übersicht öffnen: Zurück führt zur Liste, kein Stapeln bei Mehrfachaufruf
 				await Shell.Current.GoToAsync($"//ListJournal/{AppShell.ErfassenNeuRoute}");
+				break;
+			case Dashboard:
+				await Shell.Current.GoToAsync($"//ListJournal/{AppShell.Dashboard}");
 				break;
 			case Beenden:
 				Application.Current?.Quit();

@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="DA.AllergyJournal.MAUI.Views.Dashboard"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:mvvm="clr-namespace:DA.AllergyJournal.MAUI.MVVM" x:DataType="mvvm:DashboardVM"
+	Title="Allergietagebuch · Dashboard"
+    BackgroundColor="{StaticResource CanvasDark}">
+
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<!-- Dunkles Design-Thema: Farbpalette (60-30-10) -->
+			<Color x:Key="CanvasDark">#0B1120</Color>
+			<Color x:Key="SurfacePrimary">#131C2E</Color>
+			<Color x:Key="SurfaceSecondary">#1A253B</Color>
+			<Color x:Key="SurfaceSubtle">#0F172A</Color>
+			<Color x:Key="BorderSubtle">#243247</Color>
+			<Color x:Key="DividerLine">#1E293B</Color>
+
+			<!-- Typografie -->
+			<Color x:Key="TextPrimary">#F1F5F9</Color>
+			<Color x:Key="TextSecondary">#94A3B8</Color>
+			<Color x:Key="TextMuted">#64748B</Color>
+
+			<!-- Akzent & Semantik -->
+			<Color x:Key="AccentTeal">#14B8A6</Color>
+			<Color x:Key="AccentTealSurface">#113236</Color>
+			<Color x:Key="StatusGreen">#4ADE80</Color>
+			<Color x:Key="StatusAmber">#FBBF24</Color>
+			<Color x:Key="StatusRed">#F87171</Color>
+			<Color x:Key="SevereZoneFill">#28141C</Color>
+
+			<!-- Basis-Styles -->
+			<Style x:Key="SectionBorderStyle" TargetType="Border">
+				<Setter Property="BackgroundColor" Value="{StaticResource SurfacePrimary}" />
+				<Setter Property="Stroke" Value="{StaticResource BorderSubtle}" />
+				<Setter Property="StrokeThickness" Value="1" />
+				<Setter Property="StrokeShape" Value="RoundRectangle 10" />
+			</Style>
+
+			<Style x:Key="KpiLabelStyle" TargetType="Label">
+				<Setter Property="FontSize" Value="12" />
+				<Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+			</Style>
+
+			<Style x:Key="KpiValueStyle" TargetType="Label">
+				<Setter Property="FontSize" Value="24" />
+				<Setter Property="FontAttributes" Value="Bold" />
+				<Setter Property="FontFamily" Value="IBMPlexMono" />
+				<Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+			</Style>
+
+			<Style x:Key="SectionTitleStyle" TargetType="Label">
+				<Setter Property="FontSize" Value="16" />
+				<Setter Property="FontAttributes" Value="Bold" />
+				<Setter Property="FontFamily" Value="ManropeSemiBold" />
+				<Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+			</Style>
+
+			<Style x:Key="TableHeaderStyle" TargetType="Label">
+				<Setter Property="FontSize" Value="12" />
+				<Setter Property="FontAttributes" Value="Bold" />
+				<Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+			</Style>
+
+			<Style x:Key="TimeframeButtonStyle" TargetType="Button">
+				<Setter Property="BackgroundColor" Value="Transparent" />
+				<Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+				<Setter Property="FontSize" Value="12" />
+				<Setter Property="FontAttributes" Value="Bold" />
+				<Setter Property="Padding" Value="12,6" />
+				<Setter Property="CornerRadius" Value="6" />
+				<Setter Property="MinimumHeightRequest" Value="34" />
+			</Style>
+
+			<Style x:Key="TimeframeButtonActiveStyle" TargetType="Button" BasedOn="{StaticResource TimeframeButtonStyle}">
+				<Setter Property="BackgroundColor" Value="{StaticResource SurfaceSecondary}" />
+				<Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+				<Setter Property="BorderColor" Value="{StaticResource BorderSubtle}" />
+				<Setter Property="BorderWidth" Value="1" />
+			</Style>
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
+	<ScrollView>
+		<VerticalStackLayout Padding="24" Spacing="20" MaximumWidthRequest="1240">
+
+			<!-- 1. ZEITRAUM-FILTERLEISTE -->
+			<Grid ColumnDefinitions="*,Auto" ColumnSpacing="16" RowDefinitions="Auto,Auto" RowSpacing="8">
+				<Border
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HorizontalOptions="Start"
+                    Padding="4"
+                    BackgroundColor="{StaticResource SurfaceSubtle}"
+                    Stroke="{StaticResource BorderSubtle}"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 8">
+					<HorizontalStackLayout Spacing="4">
+						<Button
+                            Text="7 Tage"
+                            Style="{StaticResource TimeframeButtonStyle}"
+                            Command="{Binding SelectTimeframeCommand}"
+                            CommandParameter="7d" />
+						<Button
+                            Text="30 Tage"
+                            Style="{StaticResource TimeframeButtonActiveStyle}"
+                            Command="{Binding SelectTimeframeCommand}"
+                            CommandParameter="30d" />
+						<Button
+                            Text="90 Tage"
+                            Style="{StaticResource TimeframeButtonStyle}"
+                            Command="{Binding SelectTimeframeCommand}"
+                            CommandParameter="90d" />
+						<Button
+                            Text="12 Monate"
+                            Style="{StaticResource TimeframeButtonStyle}"
+                            Command="{Binding SelectTimeframeCommand}"
+                            CommandParameter="12m" />
+						<Button
+                            Text="Zeitraum"
+                            Style="{StaticResource TimeframeButtonStyle}"
+                            Command="{Binding SelectTimeframeCommand}"
+                            CommandParameter="custom" />
+					</HorizontalStackLayout>
+				</Border>
+
+				<Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    VerticalOptions="Center"
+                    FontFamily="IBMPlexMono"
+                    FontSize="12"
+                    TextColor="{StaticResource TextSecondary}"
+                    Text="{Binding ActiveRangeSummary}" />
+
+				<BoxView
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    HeightRequest="1"
+                    Color="{StaticResource BorderSubtle}" />
+			</Grid>
+
+			<!-- 2. ZUSAMMENGEFASSTE KENNZAHLEN (4-SPALTEN-KPI-LEISTE) -->
+			<Border Style="{StaticResource SectionBorderStyle}">
+				<Grid
+                    ColumnDefinitions="{OnIdiom Phone='*', Default='*,*,*,*'}"
+                    RowDefinitions="{OnIdiom Phone='Auto,Auto,Auto,Auto', Default='Auto'}">
+
+					<!-- KPI 1: Ø Symptom-Score -->
+					<VerticalStackLayout Grid.Row="0" Grid.Column="0" Padding="20" Spacing="8">
+						<Grid ColumnDefinitions="*,Auto">
+							<Label Style="{StaticResource KpiLabelStyle}" Text="Ø Symptom-Score (VAS)" />
+							<Label
+                                Grid.Column="1"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                TextColor="{StaticResource StatusAmber}"
+                                Text="{Binding Summary.SeverityLabel}" />
+						</Grid>
+						<HorizontalStackLayout Spacing="6" VerticalOptions="End">
+							<Label Style="{StaticResource KpiValueStyle}" Text="{Binding AvgSeverityFormatted}" />
+							<Label
+                                VerticalOptions="End"
+                                Margin="0,0,0,4"
+                                FontFamily="IBMPlexMono"
+                                FontSize="12"
+                                TextColor="{StaticResource TextMuted}"
+                                Text="/ 12" />
+						</HorizontalStackLayout>
+						<Label
+                            FontSize="12"
+                            FontFamily="IBMPlexMono"
+                            TextColor="{StaticResource StatusRed}"
+                            Text="{Binding Summary.DeltaText}" />
+					</VerticalStackLayout>
+
+					<!-- Vertikaler Trenner 1 -->
+					<BoxView
+                        IsVisible="{OnIdiom Phone=False, Default=True}"
+                        Grid.Column="0"
+                        HorizontalOptions="End"
+                        WidthRequest="1"
+                        Color="{StaticResource BorderSubtle}" />
+
+					<!-- KPI 2: Beschwerdefreie Tage -->
+					<VerticalStackLayout
+                        Grid.Row="{OnIdiom Phone=1, Default=0}"
+                        Grid.Column="{OnIdiom Phone=0, Default=1}"
+                        Padding="20"
+                        Spacing="8">
+						<Grid ColumnDefinitions="*,Auto">
+							<Label Style="{StaticResource KpiLabelStyle}" Text="Anzahl beschwerdefreier Tage" />
+							<Label
+                                Grid.Column="1"
+                                FontFamily="IBMPlexMono"
+                                FontSize="12"
+                                TextColor="{StaticResource TextMuted}"
+                                Text="Score ≤ 1" />
+						</Grid>
+						<HorizontalStackLayout Spacing="6" VerticalOptions="End">
+							<Label Style="{StaticResource KpiValueStyle}" Text="{Binding SymptomFreeDaysText}" />
+							<Label
+                                VerticalOptions="End"
+                                Margin="0,0,0,4"
+                                FontFamily="IBMPlexMono"
+                                FontSize="12"
+                                TextColor="{StaticResource TextSecondary}"
+                                Text="{Binding Summary.SymptomFreeRatioText}" />
+						</HorizontalStackLayout>
+						<Label
+                            FontSize="12"
+                            TextColor="{StaticResource TextSecondary}"
+                            Text="{Binding Summary.SevereDaysText}" />
+					</VerticalStackLayout>
+
+					<BoxView
+                        IsVisible="{OnIdiom Phone=False, Default=True}"
+                        Grid.Column="1"
+                        HorizontalOptions="End"
+                        WidthRequest="1"
+                        Color="{StaticResource BorderSubtle}" />
+
+					<!-- KPI 3: Dominanter Auslöser -->
+					<VerticalStackLayout
+                        Grid.Row="{OnIdiom Phone=2, Default=0}"
+                        Grid.Column="{OnIdiom Phone=0, Default=2}"
+                        Padding="20"
+                        Spacing="8">
+						<Grid ColumnDefinitions="*,Auto">
+							<Label Style="{StaticResource KpiLabelStyle}" Text="Dominanter Auslöser" />
+							<Label
+                                Grid.Column="1"
+                                FontFamily="IBMPlexMono"
+                                FontSize="12"
+                                TextColor="{StaticResource TextMuted}"
+                                Text="{Binding Summary.CsmsScoreText}" />
+						</Grid>
+						<Label
+                            FontSize="18"
+                            FontAttributes="Bold"
+                            LineBreakMode="TailTruncation"
+                            TextColor="{StaticResource TextPrimary}"
+                            Text="{Binding TopTriggerName}" />
+						<Label
+                            FontSize="12"
+                            FontFamily="IBMPlexMono"
+                            TextColor="{StaticResource TextSecondary}"
+                            Text="{Binding Summary.TopTriggerMeta}" />
+					</VerticalStackLayout>
+
+					<BoxView
+                        IsVisible="{OnIdiom Phone=False, Default=True}"
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        WidthRequest="1"
+                        Color="{StaticResource BorderSubtle}" />
+
+					<!-- KPI 4: Medikationseinsatz -->
+					<VerticalStackLayout
+                        Grid.Row="{OnIdiom Phone=3, Default=0}"
+                        Grid.Column="{OnIdiom Phone=0, Default=3}"
+                        Padding="20"
+                        Spacing="8">
+						<Grid ColumnDefinitions="*,Auto">
+							<Label Style="{StaticResource KpiLabelStyle}" Text="Medikationseinsatz" />
+							<Label
+                                Grid.Column="1"
+                                FontFamily="IBMPlexMono"
+                                FontSize="12"
+                                TextColor="{StaticResource TextMuted}"
+                                Text="{Binding LoggedDaysText}" />
+						</Grid>
+						<HorizontalStackLayout Spacing="6" VerticalOptions="End">
+							<Label Style="{StaticResource KpiValueStyle}" Text="{Binding Summary.MedicationRateText}" />
+							<Label
+                                VerticalOptions="End"
+                                Margin="0,0,0,4"
+                                FontFamily="IBMPlexMono"
+                                FontSize="12"
+                                TextColor="{StaticResource TextSecondary}"
+                                Text="{Binding Summary.MedicationCountText}" />
+						</HorizontalStackLayout>
+						<Label
+                            FontSize="12"
+                            FontFamily="IBMPlexMono"
+                            TextColor="{StaticResource TextSecondary}"
+                            Text="{Binding Summary.PeakSummaryText}" />
+					</VerticalStackLayout>
+				</Grid>
+			</Border>
+
+			<!-- 3. HAUPT-VERLAUFSDIAGRAMM -->
+			<Border Style="{StaticResource SectionBorderStyle}" Padding="24">
+				<VerticalStackLayout Spacing="14">
+					<Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+						<VerticalStackLayout Spacing="2">
+							<Label Style="{StaticResource SectionTitleStyle}" Text="Symptomverlauf &amp; Belastungstrend" />
+							<Label
+                                FontSize="12"
+                                FontFamily="IBMPlexMono"
+                                TextColor="{StaticResource TextSecondary}"
+                                Text="{Binding TrendSubtitle}" />
+						</VerticalStackLayout>
+
+						<HorizontalStackLayout Grid.Column="1" Spacing="16" VerticalOptions="Center">
+							<HorizontalStackLayout Spacing="6">
+								<CheckBox IsChecked="{Binding ShowPollen}" Color="{StaticResource StatusAmber}" />
+								<Label VerticalOptions="Center" FontSize="12" TextColor="{StaticResource TextPrimary}" Text="Pollen-/Umweltlast" />
+							</HorizontalStackLayout>
+							<HorizontalStackLayout Spacing="6">
+								<CheckBox IsChecked="{Binding ShowMedication}" Color="{StaticResource AccentTeal}" />
+								<Label VerticalOptions="Center" FontSize="12" TextColor="{StaticResource TextPrimary}" Text="Medikationstage" />
+							</HorizontalStackLayout>
+						</HorizontalStackLayout>
+					</Grid>
+
+					<BoxView HeightRequest="1" Color="{StaticResource DividerLine}" />
+
+					<!-- Legende -->
+					<HorizontalStackLayout Spacing="20">
+						<HorizontalStackLayout Spacing="6">
+							<BoxView WidthRequest="16" HeightRequest="2" VerticalOptions="Center" Color="{StaticResource AccentTeal}" />
+							<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="Symptom-Score (0–10)" />
+						</HorizontalStackLayout>
+						<HorizontalStackLayout Spacing="6" IsVisible="{Binding ShowPollen}">
+							<BoxView WidthRequest="16" HeightRequest="2" VerticalOptions="Center" Color="{StaticResource StatusAmber}" />
+							<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="Pollen-/Umweltlast (0–10)" />
+						</HorizontalStackLayout>
+						<HorizontalStackLayout Spacing="6" IsVisible="{Binding ShowMedication}">
+							<BoxView WidthRequest="8" HeightRequest="8" CornerRadius="1" VerticalOptions="Center" Color="{StaticResource AccentTeal}" />
+							<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="Medikation eingenommen" />
+						</HorizontalStackLayout>
+						<HorizontalStackLayout Spacing="6">
+							<BoxView WidthRequest="12" HeightRequest="10" VerticalOptions="Center" Color="{StaticResource SevereZoneFill}" />
+							<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="Schwere Zone (≥ 7)" />
+						</HorizontalStackLayout>
+					</HorizontalStackLayout>
+
+					<!-- Chart-Fläche (IDrawable im ViewModel) -->
+					<GraphicsView
+                        HeightRequest="260"
+                        Drawable="{Binding TrendChartDrawable}"
+                        SemanticProperties.Description="Verlaufsdiagramm der Symptomintensität über den gewählten Zeitraum" />
+				</VerticalStackLayout>
+			</Border>
+
+			<!-- 4. ZWEISPALTIGE DETAILANALYSE -->
+			<Grid
+                ColumnDefinitions="{OnIdiom Phone='*', Default='*,*'}"
+                RowDefinitions="{OnIdiom Phone='Auto,Auto', Default='Auto'}"
+                ColumnSpacing="20"
+                RowSpacing="20">
+
+				<!-- Links: Beschwerden nach Organsystem -->
+				<Border Grid.Row="0" Grid.Column="0" Style="{StaticResource SectionBorderStyle}" Padding="24">
+					<VerticalStackLayout Spacing="16">
+						<Grid ColumnDefinitions="*,Auto">
+							<VerticalStackLayout Spacing="2">
+								<Label Style="{StaticResource SectionTitleStyle}" Text="Beschwerden nach Organsystem" />
+								<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="Durchschnittliche Intensität und Spitzenwerte im Zeitraum" />
+							</VerticalStackLayout>
+							<Button
+                                Grid.Column="1"
+                                Text="Details →"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource AccentTeal}"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                Padding="8,4"
+                                Command="{Binding NavigateToTriggersCommand}" />
+						</Grid>
+
+						<BoxView HeightRequest="1" Color="{StaticResource DividerLine}" />
+
+						<VerticalStackLayout BindableLayout.ItemsSource="{Binding DomainStats}" Spacing="14">
+							<BindableLayout.ItemTemplate>
+								<DataTemplate>
+									<VerticalStackLayout Spacing="6">
+										<Grid ColumnDefinitions="*,Auto">
+											<VerticalStackLayout Spacing="1">
+												<Label FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" Text="{Binding Label}" />
+												<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="{Binding Description}" />
+											</VerticalStackLayout>
+											<Label
+                                                Grid.Column="1"
+                                                VerticalOptions="Start"
+                                                FontFamily="IBMPlexMono"
+                                                FontSize="13"
+                                                FontAttributes="Bold"
+                                                TextColor="{StaticResource TextPrimary}"
+                                                Text="{Binding ScoreDisplay}" />
+										</Grid>
+										<Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+											<ProgressBar
+                                                Progress="{Binding NormalizedProgress}"
+                                                ProgressColor="{StaticResource AccentTeal}"
+                                                BackgroundColor="{StaticResource SurfaceSecondary}"
+                                                VerticalOptions="Center" />
+											<Label
+                                                Grid.Column="1"
+                                                FontFamily="IBMPlexMono"
+                                                FontSize="11"
+                                                TextColor="{StaticResource TextMuted}"
+                                                Text="{Binding PeakAndDaysDisplay}" />
+										</Grid>
+									</VerticalStackLayout>
+								</DataTemplate>
+							</BindableLayout.ItemTemplate>
+						</VerticalStackLayout>
+					</VerticalStackLayout>
+				</Border>
+
+				<!-- Rechts: Auslöser & Tageszeit-Muster -->
+				<Border
+                    Grid.Row="{OnIdiom Phone=1, Default=0}"
+                    Grid.Column="{OnIdiom Phone=0, Default=1}"
+                    Style="{StaticResource SectionBorderStyle}"
+                    Padding="24">
+					<VerticalStackLayout Spacing="16">
+						<Grid ColumnDefinitions="*,Auto">
+							<VerticalStackLayout Spacing="2">
+								<Label Style="{StaticResource SectionTitleStyle}" Text="Auslöser &amp; Tageszeit-Muster" />
+								<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="Häufigkeit und mittlere Symptomstärke je Auslöser" />
+							</VerticalStackLayout>
+							<Button
+                                Grid.Column="1"
+                                Text="Auslöseranalyse →"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource AccentTeal}"
+                                FontSize="12"
+                                FontAttributes="Bold"
+                                Padding="8,4"
+                                Command="{Binding NavigateToTriggersCommand}" />
+						</Grid>
+
+						<BoxView HeightRequest="1" Color="{StaticResource DividerLine}" />
+
+						<!-- Auslöser-Tabelle Kopf -->
+						<Grid ColumnDefinitions="2*,1.1*,0.9*,1*" Padding="0,4">
+							<Label Grid.Column="0" Style="{StaticResource TableHeaderStyle}" Text="Auslöser" />
+							<Label Grid.Column="1" Style="{StaticResource TableHeaderStyle}" HorizontalTextAlignment="End" Text="Häufigkeit" />
+							<Label Grid.Column="2" Style="{StaticResource TableHeaderStyle}" HorizontalTextAlignment="End" Text="Ø Score" />
+							<Label Grid.Column="3" Style="{StaticResource TableHeaderStyle}" HorizontalTextAlignment="End" Text="Medikation" />
+						</Grid>
+
+						<VerticalStackLayout BindableLayout.ItemsSource="{Binding TopTriggers}" Spacing="0">
+							<BindableLayout.ItemTemplate>
+								<DataTemplate>
+									<VerticalStackLayout>
+										<BoxView HeightRequest="1" Color="{StaticResource DividerLine}" />
+										<Grid ColumnDefinitions="2*,1.1*,0.9*,1*" Padding="0,10">
+											<Label Grid.Column="0" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" Text="{Binding Trigger}" LineBreakMode="TailTruncation" />
+											<Label Grid.Column="1" FontFamily="IBMPlexMono" FontSize="12" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="End" Text="{Binding FrequencyDisplay}" />
+											<Label Grid.Column="2" FontFamily="IBMPlexMono" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource StatusAmber}" HorizontalTextAlignment="End" Text="{Binding AvgSeverityDisplay}" />
+											<Label Grid.Column="3" FontFamily="IBMPlexMono" FontSize="12" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="End" Text="{Binding MedicationRateDisplay}" />
+										</Grid>
+									</VerticalStackLayout>
+								</DataTemplate>
+							</BindableLayout.ItemTemplate>
+						</VerticalStackLayout>
+
+						<BoxView HeightRequest="1" Color="{StaticResource BorderSubtle}" />
+
+						<!-- Tageszeit-Schwerpunkt -->
+						<VerticalStackLayout Spacing="10">
+							<Label FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextSecondary}" Text="Symptom-Schwerpunkt nach Tageszeit" />
+							<Border Stroke="{StaticResource BorderSubtle}" StrokeThickness="1" BackgroundColor="{StaticResource SurfaceSubtle}">
+								<Grid ColumnDefinitions="*,*,*,*" BindableLayout.ItemsSource="{Binding TimeOfDayStats}">
+									<BindableLayout.ItemTemplate>
+										<DataTemplate>
+											<VerticalStackLayout Padding="10,8" Spacing="2" HorizontalOptions="Center">
+												<Label FontSize="11" TextColor="{StaticResource TextSecondary}" HorizontalTextAlignment="Center" Text="{Binding TimeOfDay}" />
+												<Label FontFamily="IBMPlexMono" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" HorizontalTextAlignment="Center" Text="{Binding AvgSeverityDisplay}" />
+												<Label FontFamily="IBMPlexMono" FontSize="11" TextColor="{StaticResource TextMuted}" HorizontalTextAlignment="Center" Text="{Binding CountDisplay}" />
+											</VerticalStackLayout>
+										</DataTemplate>
+									</BindableLayout.ItemTemplate>
+								</Grid>
+							</Border>
+						</VerticalStackLayout>
+					</VerticalStackLayout>
+				</Border>
+			</Grid>
+
+			<!-- 5. LETZTE TAGEBUCHEINTRÄGE -->
+			<Border Style="{StaticResource SectionBorderStyle}">
+				<VerticalStackLayout Spacing="0">
+					<Grid ColumnDefinitions="*,Auto" Padding="24,18">
+						<VerticalStackLayout Spacing="2">
+							<Label Style="{StaticResource SectionTitleStyle}" Text="Letzte Tagebucheinträge" />
+							<Label FontSize="12" TextColor="{StaticResource TextSecondary}" Text="Chronologische Übersicht der aktuellsten Einträge im Zeitraum" />
+						</VerticalStackLayout>
+						<Button
+                            Grid.Column="1"
+                            Text="Alle Einträge anzeigen →"
+                            BackgroundColor="Transparent"
+                            TextColor="{StaticResource AccentTeal}"
+                            FontSize="12"
+                            FontAttributes="Bold"
+                            Padding="8,4"
+                            Command="{Binding NavigateToDiaryCommand}" />
+					</Grid>
+
+					<BoxView HeightRequest="1" Color="{StaticResource BorderSubtle}" />
+
+					<!-- Tabellenkopf -->
+					<Grid
+                        ColumnDefinitions="1.1*,1*,1.2*,2*,2*,Auto"
+                        ColumnSpacing="12"
+                        Padding="24,12"
+                        BackgroundColor="{StaticResource SurfaceSubtle}">
+						<Label Grid.Column="0" Style="{StaticResource TableHeaderStyle}" Text="Datum" />
+						<Label Grid.Column="1" Style="{StaticResource TableHeaderStyle}" Text="Tageszeit" />
+						<Label Grid.Column="2" Style="{StaticResource TableHeaderStyle}" HorizontalTextAlignment="End" Text="Score" />
+						<Label Grid.Column="3" Style="{StaticResource TableHeaderStyle}" Text="Auslöser" />
+						<Label Grid.Column="4" Style="{StaticResource TableHeaderStyle}" Text="Medikation" />
+						<Label Grid.Column="5" Style="{StaticResource TableHeaderStyle}" HorizontalTextAlignment="End" Text="Aktion" />
+					</Grid>
+
+					<VerticalStackLayout BindableLayout.ItemsSource="{Binding RecentEntries}">
+						<BindableLayout.ItemTemplate>
+							<DataTemplate>
+								<VerticalStackLayout>
+									<BoxView HeightRequest="1" Color="{StaticResource DividerLine}" />
+									<Grid ColumnDefinitions="1.1*,1*,1.2*,2*,2*,Auto" ColumnSpacing="12" Padding="24,12">
+										<Label Grid.Column="0" VerticalOptions="Center" FontFamily="IBMPlexMono" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" Text="{Binding DateFormatted}" />
+										<Label Grid.Column="1" VerticalOptions="Center" FontSize="12" TextColor="{StaticResource TextSecondary}" Text="{Binding TimeOfDay}" />
+										<Label Grid.Column="2" VerticalOptions="Center" HorizontalTextAlignment="End" FontFamily="IBMPlexMono" FontSize="12" FontAttributes="Bold" TextColor="{Binding SeverityColor}" Text="{Binding ScoreBadgeText}" />
+										<Label Grid.Column="3" VerticalOptions="Center" FontSize="12" TextColor="{StaticResource TextPrimary}" LineBreakMode="TailTruncation" Text="{Binding TriggersSummary}" />
+										<Label Grid.Column="4" VerticalOptions="Center" FontSize="12" TextColor="{StaticResource TextSecondary}" LineBreakMode="TailTruncation" Text="{Binding MedicationSummary}" />
+										<Button
+                                            Grid.Column="5"
+                                            Text="Bearbeiten"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource TextSecondary}"
+                                            FontSize="12"
+                                            Padding="6,4"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditEntryCommand}"
+                                            CommandParameter="{Binding .}" />
+									</Grid>
+								</VerticalStackLayout>
+							</DataTemplate>
+						</BindableLayout.ItemTemplate>
+					</VerticalStackLayout>
+				</VerticalStackLayout>
+			</Border>
+
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

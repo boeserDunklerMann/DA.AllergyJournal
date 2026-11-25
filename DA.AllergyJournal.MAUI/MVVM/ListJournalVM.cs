@@ -8,6 +8,7 @@ namespace DA.AllergyJournal.MAUI.MVVM
 	/// <ChangeLog>
 	/// <Create Datum="24.11.2026" Entwickler="DA" />
 	/// <Change Datum="24.11.2026" Entwickler="DA">Pull-to-Refresh (AktualisierenCommand, WirdGeladen)</Change>
+	/// <Change Datum="25.11.2026" Entwickler="DA">add DashboardOeffnenAsync</Change>
 	/// </ChangeLog>
 	public partial class ListJournalVM(DbContext ctx, Services.INavigationService nav) : ObservableObject
 	{
@@ -15,6 +16,12 @@ namespace DA.AllergyJournal.MAUI.MVVM
 		/// <summary>Öffnet die SymptomPage als Unterseite, um einen neuen Eintrag zu erfassen.</summary>
 		[RelayCommand]
 		private Task NeuesElementHinzufuegenAsync() => nav.GoToAsync(AppShell.ErfassenNeuRoute);
+		/// <summary>
+		/// Öffnet die Dashboard-Page als Unterseite
+		/// </summary>
+		/// <returns></returns>
+		[RelayCommand]
+		private Task DashboardOeffnenAsync() => nav.GoToAsync(AppShell.Dashboard);
 
 		/// <summary>Pull-to-Refresh: lädt die Einträge neu. Die RefreshView setzt WirdGeladen beim Ziehen selbst auf true.</summary>
 		[RelayCommand]

@@ -39,6 +39,10 @@
                      Command="{Binding NeuesElementHinzufuegenCommand}"
                      Order="Primary"
                      Priority="0" />
+		<ToolbarItem Text="Dashboard"
+					 Command="{Binding DashboardOeffnenCommand}"
+					 Order="Primary"
+					 Priority="1"/>
 	</ContentPage.ToolbarItems>
 
 	<!-- Nach unten ziehen lädt die Einträge neu -->

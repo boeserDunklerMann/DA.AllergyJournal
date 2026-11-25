@@ -11,8 +11,8 @@
 
     <!-- Navigation erfolgt über das Hamburger-Menü (Views/AppMenu.cs) -->
     <!-- "Erfassen" ist kein Tab, sondern die Unterseite "ErfassenNeu" (siehe AppShell.xaml.cs) -->
-    <TabBar>
-        <ShellContent
+	<TabBar>
+		<ShellContent
             Title="Übersicht"
             ContentTemplate="{DataTemplate views:ListJournal}"
             Route="ListJournal" />
